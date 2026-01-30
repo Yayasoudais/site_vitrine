@@ -95,4 +95,96 @@ def category_products(request, category):
 
     return HttpResponse(html)
 
+#----------------Définition des blogs------------------------------------------------------------
+
+
+# Données simulées (pas encore de base de données)
+ARTICLES ={
+    1: {
+        'title': 'Introduction à Django', 
+        'content': 'Django est un framework web Python puissant...', 
+        'author': 'Marie',
+        'date': '2026-01-01'
+    },
+    2: {
+        'title': 'Les Views en Django', 
+        'content': 'Les views gèrent la logique métier...', 
+        'author': 'Paul',
+        'date': '2026-01-05'
+    
+    },
+    3: {
+        'title': 'URLs Dynamiques',
+        'content': 'Les paramètres dans les URLs permettent...',
+        'author': 'Sophie',   
+        'date': '2026-01-06' 
+    },
+}
         
+        
+def blog_author(request, author_name):
+    """Affiche les articles d'un auteur"""
+
+    author_articles = {
+        id: art for id, art in ARTICLES.items()
+        if art['author'] == author_name
+    }
+
+    if author_articles:
+        articles_html = ''
+        for id, article in author_articles.items():
+            articles_html += f"""
+            <li><a href="/blog/article/{id}/">{article['title']}</a></li>
+            """
+
+        html = f"""
+        <h1>Articles de {author_name}</h1>
+        <ul>{articles_html}</ul>
+        <a href="/blog/">← Retour au blog</a>
+        """
+    else:
+        html = f"""
+        <h1>Aucun article trouvé</h1>
+        <p>L'auteur "{author_name}" n'a pas encore d'articles.</p>
+        <a href="/blog/">← Retour au blog</a>
+        """
+
+    return HttpResponse(html)
+
+def blog_home(request):
+    """Liste tous les articles"""
+    articles_html= ''
+    for id, article in ARTICLES.items():
+        articles_html += f"""
+        <div style="border: 1px solid #ccc; padding: 10px; margin: 10px 0;">
+        <h2><a href="/blog/article/{id}/">{article['title']}</a></h2>
+        <p><small>Par {article['author']} le {article['date']}</small></p> 
+        </div>
+        
+        """
+    html = f"""
+    <h1> Mon Blog Django</h1>
+    <a href="/"> <- Retour accueil</a> 
+    {articles_html}
+    """
+    return HttpResponse(html)
+
+def blog_article(request, article_id):
+    """Affiche un article complet"""
+    article = ARTICLES.get(article_id)
+    if article:
+        html= f"""
+        <h1>{article['title']}</h1>
+        <p><small>Par {article['author']} le {article['date']}</small></p> 
+        <hr>
+        <p>{article['content']}</p>
+        <hr>
+        <a href="/blog/"> <- Retour au blog</a>
+        """
+    else:
+        html = f"""
+        <h1>Article non trouvé</h1>
+        <p>L'article #{article_id} n'existe pas.</p> 
+        <a href="/blog/"> <- Retour au blog</a>
+        """
+    return HttpResponse(html)
