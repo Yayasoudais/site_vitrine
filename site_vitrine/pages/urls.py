@@ -19,5 +19,10 @@ urlpatterns =[
     path('blog/',views.blog_home, name ='blog_home'),
     path('blog/article/<int:article_id>/',views.blog_article, name= 'blog_article'),
     path('blog/author/<str:author_name>/',views.blog_author, name= 'blog_author'),
+    
+    
+    # query
+    
+    path('search/',views.search, name='search')
          
 ]

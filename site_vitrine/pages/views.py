@@ -188,3 +188,32 @@ def blog_article(request, article_id):
         <a href="/blog/"> <- Retour au blog</a>
         """
     return HttpResponse(html)
+
+# ---------------------------------------------------
+
+def search(request):
+    """Page de recherche avec paramètres GET"""
+    query = request.GET.get('q', '') # Récupère le paramètre 'q' 
+    category = request.GET.get('category', 'all')
+    
+    html = f"""
+    <h1> Recherche</h1>
+    <form method="GET">
+        <input type="text" name="q" value="{query}" placeholder="Rechercher...">
+        <select name="category">
+            <option value="all">Toutes catégories</option> 
+            <option value="articles">Articles</option> 
+            <option value="produits">Produits</option>
+        </select>
+        <button type="submit">Rechercher</button>
+    </form>
+    <hr>
+    """
+    if query:
+        html += f"""
+        <h2>Résultats pour "{query}" dans "{category}"</h2> 
+        <p>Vous avez recherché : <strong>{query}</strong></p>
+        """
+    else:
+        html += "<p>Entrez un terme de recherche...</p>"
+    return HttpResponse(html)
