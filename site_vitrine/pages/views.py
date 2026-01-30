@@ -54,4 +54,45 @@ def contact(request):
     return HttpResponse(html)
 
 
+
+def article_detail(request, id):
+    """Affiche un article selon son ID"""
+    html = f""" 
+    <hl>Article #{id} </h1> 
+    <p>Vous lisez l'article numéro {id}</p> 
+    <a href="/"> <- Retour accueil</a>
+    """
+    return HttpResponse(html)
+    
+def user_profile(request, username):
+    """Affiche le profil d'un utilisateur""" 
+    html = f"""
+    <h1>Profil de {username}</h1>
+    <p>Bienvenue sur votre profil, {username} !</p>
+    <a href="/"> <- Retour accueil</a>
+    """
+    return HttpResponse(html)
+    
+def category_products(request, category):
+    """Affiche les produits d'une catégorie""" 
+    products= {
+        'electronique' : ['Laptop', 'Smartphone', 'Tablette'], 
+        'vetements' : ['T-shirt', 'Jean', 'Chaussures'], 
+        'livres' : ['Python pour débutants', 'Django par la pratique'],
+    }
+
+    items = products.get(category, [])
+    if items:
+        items_html = '<ul>' + ''.join([f'<li>{item}</li>' for item in items]) +'</ul>'
+    else:
+        items_html = '<p>Catégorie inconnues </p>'
+        
+    html = f"""
+    <h1> Catégorie : {category}</h1>
+    {items_html}
+    <a href="/"> <- Retour accueil</a>
+    """
+
+    return HttpResponse(html)
+
         
