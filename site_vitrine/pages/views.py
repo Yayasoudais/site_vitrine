@@ -217,3 +217,55 @@ def search(request):
     else:
         html += "<p>Entrez un terme de recherche...</p>"
     return HttpResponse(html)
+
+
+
+#-----------------------------------------------------------------
+
+def calculatrice(request):
+    """Calculatrice Simple""" 
+    result = None 
+    error = None
+    if request.method == 'GET' and 'a' in request.GET:
+        try:
+            a = float (request.GET.get('a', 0))
+            b = float (request.GET.get('b', 0)) 
+            operation = request.GET.get('op', 'add')
+            if operation == 'add':
+                result = a+b 
+            elif operation == 'sub': 
+                result = a-b 
+            elif operation == 'mul':
+                result = a*b 
+            elif operation == 'div': 
+                if b != 0: 
+                    result = a/b 
+                else:
+                    error = "Division par zéro impossible" 
+        except ValueError:
+            error = "Veuillez entrer des nombres valides"
+    
+    html= f"""
+    <h1> Calculatrice Django</h1>
+    <form method="GET">
+        <input type="number" step="any" name="a" placeholder="Nombre 1" required>
+        <select name="op">
+            <option value="add">+</option> 
+            <option value="sub">-</option> 
+            <option value="mul">x</option> 
+            <option value="div">/</option>
+        </select>
+        <input type="number" step="any" name="b" placeholder="Nombre 2" required> 
+        <hr>
+        <button type="submit">Calculer</button>
+        <hr>
+    </form>
+    """
+    if error:
+        html += f"<p style='color: red;'> ❌ {error}</p>"
+    elif result is not None:
+        html += f"<h2>Résultat {result}</h2>"
+    
+    html += "<br><a href='/'> <- Retour accueil</a>"
+    
+    return HttpResponse(html)

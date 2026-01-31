@@ -23,6 +23,10 @@ urlpatterns =[
     
     # query
     
-    path('search/',views.search, name='search')
+    path('search/',views.search, name='search'),
+    
+    #Calculatrice
+    
+    path('calculatrice/',views.calculatrice, name='calculatrice'),
          
 ]
